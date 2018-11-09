@@ -10,10 +10,15 @@ class SynthStats():
 		
 		# Start all functions in passive state
 		self.play_mode = ''
+		self.playing_artist = ''
+		self.playing_track = ''
 		self.play_random = False
 		self.play_chomatic = False
 		self.show_spectro = False
 		self.play_bad_k = False
+		
+		#other stats
+		self.button_height_max = 0
 		
 		# API Call reducing logic
 		self.spot_api_called = False
@@ -28,7 +33,6 @@ class SynthStats():
 	
 	def reset_stats(self):
 		"""Initialize statistics that can change during the program."""
-		self.play_mode = ''
 		self.play_random = False
 		self.play_chromatic = False
 		self.play_bad_k = False
