@@ -39,3 +39,7 @@ A musical synthesizer program with a few key functions:
 10. matplotlib
 11. spotipy
 12. math
+
+#Credits:
+1. Implementation of the Karplus String Algorithm and note playing modules were developed based on the book "Python Playground: Geeky Projects for the Curious Programmer" by Mahesh Venkitachalam (No Starch Press, 2016)
+2. I learned about many of the general pygame techniques used in this program from the book "Python Crash Course: A Hands-On, Project-Based Introduction to Programming" by Erich Matthes (No Starch Press, 2016)
