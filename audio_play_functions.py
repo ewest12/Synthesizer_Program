@@ -68,7 +68,7 @@ def createNotes(ap_settings, nplayer, stats):
 		nplayer.add(name + '.wav')
 #ap_settings, screen, buttons, nplayer, urn, stats
 		
-def playSong(notes_list, pitch_info, song, ap_settings, sp, nplayer, screen, buttons, urn, stats, playback='it'):
+def playSong(notes_list, pitch_info, song, ap_settings, sp, nplayer, screen, buttons, urn, stats, playmode, playback='it'):
 	"""plays the audio fingerprint extraction from a song"""
 	#make sure spectrogram isn't in use
 	if stats.show_spectro == True:
@@ -95,7 +95,7 @@ def playSong(notes_list, pitch_info, song, ap_settings, sp, nplayer, screen, but
 				time.sleep(sleep_time)
 				#see if function should be stopped based on input
 				#check for events
-				scf.check_events(ap_settings, screen, buttons, nplayer, urn, stats)
+				scf.check_events(ap_settings, screen, buttons, nplayer, urn, stats, playmode)
 				if stats.play_bad_k == False:
 					break
 		#playback "in time" with segment time stamp	
@@ -107,11 +107,11 @@ def playSong(notes_list, pitch_info, song, ap_settings, sp, nplayer, screen, but
 				i = i + 1
 				#see if function should be stopped based on input
 				#check for events
-				scf.check_events(ap_settings, screen, buttons, nplayer, urn, stats)
+				scf.check_events(ap_settings, screen, buttons, nplayer, urn, stats, playmode)
 				if stats.play_bad_k == False:
 					break
 		
-def playRandom(ap_settings, screen, buttons, nplayer, urn, stats):
+def playRandom(ap_settings, screen, buttons, nplayer, urn, stats, playmode):
 	"""plays a random song wiht all the notes availabile"""
 	#initialize click
 	stats.play_random = True
@@ -124,11 +124,11 @@ def playRandom(ap_settings, screen, buttons, nplayer, urn, stats):
 			time.sleep(0.25*rest[0])
 			#see if function should be stopped based on input
 			#check for events
-			scf.check_events(ap_settings, screen, buttons, nplayer, urn, stats)
+			scf.check_events(ap_settings, screen, buttons, nplayer, urn, stats, playmode)
 			if stats.play_random == False:
 				break
 
-def playChromatic(ap_settings, screen, buttons, nplayer, urn, stats):
+def playChromatic(ap_settings, screen, buttons, nplayer, urn, stats, playmode):
 	"""plays all available notes in the file in order"""
 	#initialize click
 	stats.play_chromatic = True
@@ -137,7 +137,7 @@ def playChromatic(ap_settings, screen, buttons, nplayer, urn, stats):
 		time.sleep(0.5)
 		#see if function should be stopped based on input
 		#check for events
-		scf.check_events(ap_settings, screen, buttons, nplayer, urn, stats)
+		scf.check_events(ap_settings, screen, buttons, nplayer, urn, stats, playmode)
 		if stats.play_chromatic == False:
 			break
 
