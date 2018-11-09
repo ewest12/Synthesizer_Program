@@ -8,7 +8,7 @@ from button import Button
 from song import Song
 from synth_stats import SynthStats
 
-def check_events(ap_settings, screen, buttons, nplayer, urn, stats):
+def check_events(ap_settings, screen, buttons, nplayer, urn, stats, playmode):
 	"""Respond to keypresses and mouse events."""
 	for event in pygame.event.get():
 		# Allows user to Quit
@@ -16,7 +16,7 @@ def check_events(ap_settings, screen, buttons, nplayer, urn, stats):
 			pygame.quit()		
 		# Allows control with keyboard
 		elif event.type == pygame.KEYDOWN:
-			check_keydown_events(event, ap_settings, screen, stats)
+			check_keydown_events(event, ap_settings, screen, stats, nplayer)
 		elif event.type == pygame.KEYUP:
 			check_keyup_events(event)
 		# Mouse controls
@@ -26,7 +26,7 @@ def check_events(ap_settings, screen, buttons, nplayer, urn, stats):
 			button = find_which_clicked(mouse_x, mouse_y, buttons)
 			#check info on that button
 			#try:
-			check_button(ap_settings, screen, button, buttons, nplayer, urn, stats)
+			check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, playmode)
 			#except:
 			#	print("no buttons were clicked")
 			
@@ -89,13 +89,61 @@ def find_which_clicked(mouse_x, mouse_y, buttons):
 		#print("Clicked within X Boundary: " + str(on_button_x))
 		#print("Clicked within Y Boundary: " + str(on_button_y))
 		#print("Button Clicked: " + str(button_clicked))
-			
-def check_keydown_events(event, ap_settings, screen, stats):
+
+
+		
+def check_keydown_events(event, ap_settings, screen, stats, nplayer):
 	"""Respond to keypresses."""
-	if event.key == pygame.K_RIGHT:
-		print("right key down")
-	elif event.key == pygame.K_LEFT:
-		print("left key down")
+	if event.key == pygame.K_a:
+		print("a key down")
+		pitch = ap_settings.key_map['a']
+		nplayer.play(pitch + ".wav")
+	elif event.key == pygame.K_w:
+		print("w key down")
+		pitch = ap_settings.key_map['w']
+		nplayer.play(pitch + ".wav")
+	elif event.key == pygame.K_s:
+		print("s key down")
+		pitch = ap_settings.key_map['s']
+		nplayer.play(pitch + ".wav")
+	elif event.key == pygame.K_e:
+		print("e key down")
+		pitch = ap_settings.key_map['e']
+		nplayer.play(pitch + ".wav")
+	elif event.key == pygame.K_d:
+		print("d key down")
+		pitch = ap_settings.key_map['d']
+		nplayer.play(pitch + ".wav")
+	elif event.key == pygame.K_f:
+		print("f key down")
+		pitch = ap_settings.key_map['f']
+		nplayer.play(pitch + ".wav")
+	elif event.key == pygame.K_t:
+		print("t key down")
+		pitch = ap_settings.key_map['t']
+		nplayer.play(pitch + ".wav")
+	elif event.key == pygame.K_g:
+		print("g key down")
+		pitch = ap_settings.key_map['g']
+		nplayer.play(pitch + ".wav")
+	elif event.key == pygame.K_y:
+		print("y key down")
+		pitch = ap_settings.key_map['y']
+		nplayer.play(pitch + ".wav")
+	elif event.key == pygame.K_h:
+		print("h key down")
+		pitch = ap_settings.key_map['h']
+		nplayer.play(pitch + ".wav")
+	elif event.key == pygame.K_u:
+		print("u key down")
+		pitch = ap_settings.key_map['u']
+		nplayer.play(pitch + ".wav")
+	elif event.key == pygame.K_j:
+		print("j key down")
+		pitch = ap_settings.key_map['j']
+		nplayer.play(pitch + ".wav")
+	#elif event.key == pygame.K_LEFT:
+	#	print("left key down")
 	elif event.key == pygame.K_SPACE:
 		#used to stop any active program
 		print("space key down")
@@ -112,12 +160,18 @@ def check_keyup_events(event):
 	elif event.key == pygame.K_LEFT:
 		print("Left key up")
 		
-def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats):
+def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, playmode):
 	"""Detects which button was clicked and operates accordingly."""
 	#button_clicked = button.rect.collidepoint(mouse_x, mouse_y)
 	#if button_clicked:
 	if button.name == 'Bad Karaoke':
 		print("bad karaoke was clicked")
+		#change the playmode and prep
+		#play_mode_name = button.name
+		stats.play_mode = button.name
+		print("Play mode: " + stats.play_mode)
+		playmode.prep_play_mode()
+		update_screen(ap_settings, screen, buttons, playmode)
 		#use logic to reduce api calls
 		if stats.spot_api_called == False:
 			#initialize spotify authorization
@@ -138,6 +192,10 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats):
 			stats.init_song(sp, urn, ap_settings)
 			#song = Song(sp, urn, ap_settings)
 			song = stats.song
+			stats.playing_track = stats.song.t_name
+			stats.playing_artist = stats.song.t_artist
+			playmode.prep_playing_output()
+			update_screen(ap_settings, screen, buttons, playmode)
 
 			# get the pitch info
 			pitch_info = song.getPitchInfo()
@@ -151,12 +209,27 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats):
 			# create all of the notes
 			#apf.createNotes(ap_settings, nplayer, stats)
 			#play the song
-			apf.playSong(notes_list, pitch_info, song, ap_settings, sp, nplayer, screen, buttons, urn, stats)
+			apf.playSong(notes_list, pitch_info, song, ap_settings, sp, nplayer, screen, buttons, urn, stats, playmode)
 		else:
+			stats.playing_track = stats.song.t_name
+			stats.playing_artist = stats.song.t_artist
+			playmode.prep_playing_output()
+			update_screen(ap_settings, screen, buttons, playmode)
 			#play the song
-			apf.playSong(stats.notes_list, stats.pitch_info, stats.song, ap_settings, stats.sp, nplayer, screen, buttons, stats.urn, stats)
+			apf.playSong(stats.notes_list, stats.pitch_info, stats.song, ap_settings, stats.sp, nplayer, screen, buttons, stats.urn, stats, playmode)
+		
+		#reset playmode
+		stats.play_mode = ''
+		stats.playing_track = ''
+		stats.playing_artist = ''
+		playmode.prep_playing_output()
+		playmode.prep_play_mode()
 	if button.name == 'Spectrogram':
 		print("spectogram was clicked")
+		#change the playmode and prep
+		stats.play_mode = button.name
+		playmode.prep_play_mode()
+		update_screen(ap_settings, screen, buttons, playmode)
 		#use logic to reduce api calls
 		if stats.spot_api_called == False:
 			#initialize spotify authorization
@@ -178,6 +251,10 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats):
 			stats.init_song(sp, urn, ap_settings)
 			#song = Song(sp, urn, ap_settings)
 			song = stats.song
+			stats.playing_track = stats.song.t_name
+			stats.playing_artist = stats.song.t_artist
+			playmode.prep_playing_output()
+			update_screen(ap_settings, screen, buttons, playmode)
 			# get the pitch info
 			pitch_info = song.getPitchInfo()
 			stats.pitch_info = pitch_info
@@ -193,18 +270,55 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats):
 			#avf.plotAudio(pitch_info, class_info, 'f', True, True, True, True, True, True, True)
 			avf.plotAudio(song, pitch_info, class_info, stats, 'f')
 		else:
+			stats.playing_track = stats.song.t_name
+			stats.playing_artist = stats.song.t_artist
+			playmode.prep_playing_output()
+			update_screen(ap_settings, screen, buttons, playmode)
 			#plot the graph
 			avf.plotAudio(stats.song, stats.pitch_info, stats.class_info, stats, 'f')
 		
+		#reset playmode
+		stats.play_mode = ''
+		stats.playing_track = ''
+		stats.playing_artist = ''
+		playmode.prep_playing_output()
+		playmode.prep_play_mode()
+		
 	if button.name == 'Random':
 		print("Random was clicked")
-		apf.playRandom(ap_settings, screen, buttons, nplayer, urn, stats)
+		#change the playmode and prep
+		stats.play_mode = button.name
+		playmode.prep_play_mode()
+		stats.playing_track = 'Random Song'
+		stats.playing_artist = 'Synth Bot'
+		playmode.prep_playing_output()
+		update_screen(ap_settings, screen, buttons, playmode)
+		apf.playRandom(ap_settings, screen, buttons, nplayer, urn, stats, playmode)
+		#reset playmode
+		stats.play_mode = ''
+		stats.playing_track = ''
+		stats.playing_artist = ''
+		playmode.prep_playing_output()
+		playmode.prep_play_mode()
 	if button.name == 'Chromatic':
 		print("Chromatic was clicked")
-		apf.playChromatic(ap_settings, screen, buttons, nplayer, urn, stats)
+		#change the playmode and prep
+		stats.play_mode = button.name
+		stats.playing_track = 'Chromatic Scale'
+		stats.playing_artist = 'Synth Bot'
+		playmode.prep_playing_output()
+		playmode.prep_play_mode()
+		update_screen(ap_settings, screen, buttons, playmode)
+		apf.playChromatic(ap_settings, screen, buttons, nplayer, urn, stats, playmode)
+		#reset playmode
+		stats.play_mode = ''
+		stats.playing_track = ''
+		stats.playing_artist = ''
+		playmode.prep_playing_output()
+		playmode.prep_play_mode()
 
 		
-def update_screen(ap_settings, screen, buttons):
+def update_screen(ap_settings, screen, buttons, playmode):
 	"""Update images on the screen and flip to a new screen."""
 	# Redraw the screen during each pass through the loop.
 	screen.fill(ap_settings.bg_color)
@@ -214,19 +328,13 @@ def update_screen(ap_settings, screen, buttons):
 	for button in buttons:
 		button.draw_button()
 	
+	# Draw the play mode informtion.
+	playmode.show_play_info()
+	
 	# Make the most recently drawn screen visible.
 	pygame.display.flip()
-	
-#def create_button(ap_settings, screen, key, value):
-#	"""Create a button and place it in the column."""
-#	button = Button(ap_settings, screen, key, value)
-#	button_width = button.rect.width
-	#button.x = button_width + 2 * button_width * button_number
-	#button.rect.x = button.x
-	#button.rect.y = button.rect.height + 2 * button.rect.height * row_number
-	#buttons.add(button)
 			
-def create_buttons(ap_settings, screen):
+def create_buttons(ap_settings, screen, stats):
 	"""Create a full group of buttons."""
 	# Create a button and find the number of buttons in a row.
 	# Spacing between each button is equal to one button width.
@@ -248,6 +356,8 @@ def create_buttons(ap_settings, screen):
 	#determine the max # of buttons that will fit in x,y dimensions for printing
 	num_buttons_x, button_block = get_button_fit_x(ap_settings, buttons)
 	max_buttons_y, button_height_max = get_button_fit_y(ap_settings, buttons)
+	stats.button_height_max = button_height_max
+	print("Button height max: " + str(stats.button_height_max))
 
 	#we are printing buttons across top of screen
 	#determine the starting point so that the buttons are centered
@@ -328,65 +438,3 @@ def get_button_fit_y(ap_settings, buttons):
 	
 	return num_buttons_fit_y, button_height_max
 	
-def create_buttons_orig(ap_settings, screen):
-	"""Create a full group of buttons."""
-	# Create a button and find the number of buttons in a row.
-	# Spacing between each button is equal to one button width.
-	
-	#import the dictionary of button types
-	buttons_to_make = ap_settings.button_types
-	#create the list of buttons
-	buttons = []
-	
-	#get the number of buttons to be printed
-	num_buttons = len(buttons_to_make)
-	#determine the max # of buttons that will fit in x,y dimensions for printing
-	max_buttons_x = get_button_fit_x(ap_settings)
-	max_buttons_y = get_button_fit_y(ap_settings)
-	
-	#we are printing buttons across top of screen
-	#determine the starting point so that the buttons are centered
-	#if the buttons will all fit on 1 row
-	if num_buttons <= max_buttons_x:
-		#find the leftmost x starting coordinate
-		#get the block needed for buttons
-		button_block = num_buttons * ap_settings.button_width
-		#cut it in half
-		button_block_half = button_block / 2
-		#cut the screen in half
-		screen_half = ap_settings.screen_width / 2
-		#get leftmost starting coordinate
-		starting_coord_x = screen_half - button_block_half
-		print(starting_coord_x)
-		
-		#find the y coordinate for the row
-		starting_coord_y = ap_settings.button_height
-		
-		print(starting_coord_y)
-		
-		#declare the number of rows
-		num_rows = 1
-	else:
-		print("Number of buttons per row exceeded")
-	
-	#counter for tracking button number
-	i = 0
-	x = starting_coord_x
-	y = starting_coord_y
-	
-	#create and all of the buttons
-	for key, value in buttons_to_make.items():		
-		button = Button(ap_settings, screen, key, value, x, y)
-		buttons.append(button)
-		#index counter
-		i = i + 1
-		#update x and y_values
-		x = (ap_settings.button_width + ap_settings.button_width / 4) * i
-		print(x)
-		if num_rows == 1:
-			y = y
-			print(y)
-			
-		#button.draw_button()
-	
-	return buttons	
