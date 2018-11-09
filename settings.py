@@ -46,6 +46,10 @@ class Settings():
 		#define pitch class dictionary
 		self.pitch_class = {'C': 0, 'C#': 1,'D': 2, 'D#': 3, 'E': 4, 'F': 5, 'F#': 6,
 				'G': 7, 'G#': 8, 'A': 9, 'A#': 10, 'B': 11}
+		#set keymap for keyboard mode
+		self.key_map = {'a': 'C', 'w': 'C#', 's': 'D', 'e': 'D#', 'd': 'E', 
+				'f': "F", 't': 'F#', 'g': 'G', 'y': 'G#', 'h': 'A', 
+				'u': 'A#', 'j': 'B'}
 		
 		# define y coordinates for displaying basic info
 		self.y_bar = 0.1
