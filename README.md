@@ -2,7 +2,7 @@
 A musical synthesizer program with a few key functions: 
 1. Is a stand alone program that can generate WAV files for playback, if necessary
 2. Play these sounds based on mapped computer keyboard inputs
-3. Display keyboard input visually
+3. Display keyboard input and other "active modes" status visually
 4. Have a few "fun" modes:
   a. Interface with Spotify API to play a "bad karaoke" version based on an estimate of the song's acoustic fingerprint.
     i. Song determined either by user input or a random choice from a seed of pre-chosen songs.
