@@ -68,7 +68,7 @@ def createNotes(ap_settings, nplayer, stats):
 		nplayer.add(name + '.wav')
 #ap_settings, screen, buttons, nplayer, urn, stats
 		
-def playSong(notes_list, pitch_info, song, ap_settings, sp, nplayer, screen, buttons, urn, stats, playmode, piano_keys, playback='it'):
+def playSong(notes_list, pitch_info, song, ap_settings, sp, nplayer, screen, buttons, urn, stats, playmode, piano_keys, input_box, playback='it'):
 	"""plays the audio fingerprint extraction from a song"""
 	#make sure spectrogram isn't in use
 	if stats.show_spectro == True:
@@ -101,7 +101,7 @@ def playSong(notes_list, pitch_info, song, ap_settings, sp, nplayer, screen, but
 				scf.update_screen(ap_settings, screen, buttons, playmode, piano_keys)
 				#see if function should be stopped based on input
 				#check for events
-				scf.check_events(ap_settings, screen, buttons, nplayer, urn, stats, playmode, piano_keys)
+				scf.check_events(ap_settings, screen, buttons, nplayer, stats, playmode, piano_keys, input_box)
 				if stats.play_bad_k == False:
 					break
 		#playback "in time" with segment time stamp	
@@ -110,20 +110,20 @@ def playSong(notes_list, pitch_info, song, ap_settings, sp, nplayer, screen, but
 				pitch_down = pitch
 				piano_key = scf.check_piano_pitch(pitch_down, piano_keys)
 				piano_key.change_colors_active()
-				scf.update_screen(ap_settings, screen, buttons, playmode, piano_keys)
+				scf.update_screen(ap_settings, screen, buttons, playmode, piano_keys, input_box)
 				nplayer.play(pitch + '.wav')
 				sleep_time = times[(i + 1)] - times[i]
 				time.sleep(sleep_time)
 				piano_key.change_colors_passive()
-				scf.update_screen(ap_settings, screen, buttons, playmode, piano_keys)
+				scf.update_screen(ap_settings, screen, buttons, playmode, piano_keys, input_box)
 				i = i + 1
 				#see if function should be stopped based on input
 				#check for events
-				scf.check_events(ap_settings, screen, buttons, nplayer, urn, stats, playmode, piano_keys)
+				scf.check_events(ap_settings, screen, buttons, nplayer, stats, playmode, piano_keys, input_box)
 				if stats.play_bad_k == False:
 					break
 		
-def playRandom(ap_settings, screen, buttons, nplayer, urn, stats, playmode, piano_keys):
+def playRandom(ap_settings, screen, buttons, nplayer, urn, stats, playmode, piano_keys, input_box):
 	"""plays a random song wiht all the notes availabile"""
 	#initialize click
 	stats.play_random = True
@@ -136,7 +136,7 @@ def playRandom(ap_settings, screen, buttons, nplayer, urn, stats, playmode, pian
 			pitch_down = note
 			piano_key = scf.check_piano_pitch(pitch_down, piano_keys)
 			piano_key.change_colors_active()
-			scf.update_screen(ap_settings, screen, buttons, playmode, piano_keys)
+			scf.update_screen(ap_settings, screen, buttons, playmode, piano_keys, input_box)
 			nplayer.play(note + '.wav')
 		#	print("play random worked")
 			# rest - 1 to 8 beats
@@ -144,14 +144,14 @@ def playRandom(ap_settings, screen, buttons, nplayer, urn, stats, playmode, pian
 									p=[0.15,0.7, 0.1, 0.05])
 			time.sleep(0.25*rest[0])
 			piano_key.change_colors_passive()
-			scf.update_screen(ap_settings, screen, buttons, playmode, piano_keys)
+			scf.update_screen(ap_settings, screen, buttons, playmode, piano_keys, input_box)
 			#see if function should be stopped based on input
 			#check for events
-			scf.check_events(ap_settings, screen, buttons, nplayer, urn, stats, playmode, piano_keys)
+			scf.check_events(ap_settings, screen, buttons, nplayer, stats, playmode, piano_keys, input_box)
 			if stats.play_random == False:
 				break
 
-def playChromatic(ap_settings, screen, buttons, nplayer, urn, stats, playmode, piano_keys):
+def playChromatic(ap_settings, screen, buttons, nplayer, urn, stats, playmode, piano_keys, input_box):
 	"""plays all available notes in the file in order"""
 	#initialize click
 	stats.play_chromatic = True
@@ -159,14 +159,14 @@ def playChromatic(ap_settings, screen, buttons, nplayer, urn, stats, playmode, p
 		pitch_down = name
 		piano_key = scf.check_piano_pitch(pitch_down, piano_keys)
 		piano_key.change_colors_active()
-		scf.update_screen(ap_settings, screen, buttons, playmode, piano_keys)
+		scf.update_screen(ap_settings, screen, buttons, playmode, piano_keys, input_box)
 		nplayer.play(name + '.wav')
 		time.sleep(0.5)
 		piano_key.change_colors_passive()
-		scf.update_screen(ap_settings, screen, buttons, playmode, piano_keys)
+		scf.update_screen(ap_settings, screen, buttons, playmode, piano_keys, input_box)
 		#see if function should be stopped based on input
 		#check for events
-		scf.check_events(ap_settings, screen, buttons, nplayer, urn, stats, playmode, piano_keys)
+		scf.check_events(ap_settings, screen, buttons, nplayer, stats, playmode, piano_keys, input_box)
 		if stats.play_chromatic == False:
 			break
 
