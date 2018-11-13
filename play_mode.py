@@ -13,7 +13,7 @@ class PlayMode():
 		self.stats = stats
 		
 		# Font settings for play mode information.
-		self.text_color = (30, 30, 30)
+		self.text_color = (171, 170, 170)
 		self.font = pygame.font.SysFont(None, 48)
 		
 		# Prepare the initial play image.
