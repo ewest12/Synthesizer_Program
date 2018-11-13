@@ -10,10 +10,10 @@ class Settings():
 		self.bg_color = (69, 68, 68)
 		
 		# Authorization info
-		self.client_id = 'fe2f103e32464be58710379146d91045'
-		self.client_secret = '192bc5e7e3d345afa099dc04983451d0'
-		self.redirect_uri = 'http://localhost/'
-		self.my_username = '123638665'
+		self.client_id = ''
+		self.client_secret = ''
+		self.redirect_uri = ''
+		self.my_username = ''
 		self.general_username = 'spotify'
 		
 		# Sample songs urns for demos
