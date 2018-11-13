@@ -1,6 +1,7 @@
 import sys
 import pygame
 import math, random
+#import pyperclip
 import audio_play_functions as apf
 import spotipy_et_functions as spf
 import audio_viz_functions as avf
@@ -8,28 +9,45 @@ from button import Button
 from piano_keys import PianoKey
 from song import Song
 from synth_stats import SynthStats
+from input_box import InputBox
 
-def check_events(ap_settings, screen, buttons, nplayer, urn, stats, playmode, piano_keys):
+#https://pypi.org/project/pyperclip/
+
+def check_events(ap_settings, screen, buttons, nplayer, stats, playmode, piano_keys, input_box):
 	"""Respond to keypresses and mouse events."""
 	for event in pygame.event.get():
 		# Allows user to Quit
 		if event.type == pygame.QUIT:
-			pygame.quit()		
+			pygame.quit()	
 		# Allows control with keyboard
 		elif event.type == pygame.KEYDOWN:
-			check_keydown_events(event, ap_settings, screen, buttons, stats, playmode, nplayer, piano_keys)
+			#handle the input box
+			if input_box.active == True:
+				print("Stats URN: " + stats.urn)
+				input_box.handle_event(event, stats)
+				input_box.update()
+				print("Stats URN: " + stats.urn)
+			else:
+			#handle the keyboard
+				check_keydown_events(event, ap_settings, screen, buttons, stats, playmode, nplayer, piano_keys)
 		elif event.type == pygame.KEYUP:
-			check_keyup_events(event, ap_settings, screen, buttons, stats, playmode, nplayer, piano_keys)
+			if input_box.active == False:
+			#handle the keyboard
+				check_keyup_events(event, ap_settings, screen, buttons, stats, playmode, nplayer, piano_keys)
 		# Mouse controls
 		elif event.type == pygame.MOUSEBUTTONDOWN:
+			#check to see if input box is clicks
+			input_box.handle_event(event, stats)
 			mouse_x, mouse_y = pygame.mouse.get_pos()
-			#see which button was clicked
-			button = find_which_clicked(mouse_x, mouse_y, buttons)
-			#check info on that button
-			try:
-				check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, playmode, piano_keys)
-			except:
-				print("no buttons were clicked")
+			if input_box.active == False:
+				#see which button was clicked
+				button = find_which_clicked(mouse_x, mouse_y, buttons)
+				#check info on that button
+				try:
+					urn = stats.urn
+					check_button(ap_settings, screen, button, buttons, nplayer, stats, playmode, piano_keys, input_box)
+				except:
+					print("no buttons were clicked. Or No internet connection detected")		
 			
 def find_which_clicked(mouse_x, mouse_y, buttons):
 	for button in buttons:
@@ -267,7 +285,7 @@ def check_keyup_events(event, ap_settings, screen, buttons, stats, playmode, npl
 	elif event.key == pygame.K_LEFT:
 		print("Left key up")
 		
-def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, playmode, piano_keys):
+def check_button(ap_settings, screen, button, buttons, nplayer, stats, playmode, piano_keys, input_box):
 	"""Detects which button was clicked and operates accordingly."""
 	#button_clicked = button.rect.collidepoint(mouse_x, mouse_y)
 	#if button_clicked:
@@ -275,10 +293,11 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 		print("bad karaoke was clicked")
 		#change the playmode and prep
 		#play_mode_name = button.name
+		#urn = stats.urn
 		stats.play_mode = button.name
 		print("Play mode: " + stats.play_mode)
 		playmode.prep_play_mode()
-		update_screen(ap_settings, screen, buttons, playmode, piano_keys)
+		update_screen(ap_settings, screen, buttons, playmode, piano_keys, input_box)
 		#use logic to reduce api calls
 		if stats.spot_api_called == False:
 			#initialize spotify authorization
@@ -287,14 +306,14 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 			stats.spot_api_called = True
 			#get the urn for the song
 			#if no urn specificied find a random sample
-			if urn == 'random' and stats.urn == '':
+			if stats.urn == 'random':# and stats.urn == '':
 				samples = ap_settings.sample_urns
 				key = random.choice(list(samples.keys()))
 				#urn = random.choice(samples.items())
 				urn = ap_settings.sample_urns[key]
-				stats.urn = urn
+				#stats.urn = urn
 			else:
-				urn = urn 
+				urn = stats.urn
 			# initialize the song and store in game stats to reduce API calls
 			stats.init_song(sp, urn, ap_settings)
 			#song = Song(sp, urn, ap_settings)
@@ -302,7 +321,7 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 			stats.playing_track = stats.song.t_name
 			stats.playing_artist = stats.song.t_artist
 			playmode.prep_playing_output()
-			update_screen(ap_settings, screen, buttons, playmode, piano_keys)
+			update_screen(ap_settings, screen, buttons, playmode, piano_keys, input_box)
 
 			# get the pitch info
 			pitch_info = song.getPitchInfo()
@@ -316,14 +335,14 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 			# create all of the notes
 			#apf.createNotes(ap_settings, nplayer, stats)
 			#play the song
-			apf.playSong(notes_list, pitch_info, song, ap_settings, sp, nplayer, screen, buttons, urn, stats, playmode, piano_keys)
+			apf.playSong(notes_list, pitch_info, song, ap_settings, sp, nplayer, screen, buttons, urn, stats, playmode, piano_keys, input_box)
 		else:
 			stats.playing_track = stats.song.t_name
 			stats.playing_artist = stats.song.t_artist
 			playmode.prep_playing_output()
-			update_screen(ap_settings, screen, buttons, playmode, piano_keys)
+			update_screen(ap_settings, screen, buttons, playmode, piano_keys, input_box)
 			#play the song
-			apf.playSong(stats.notes_list, stats.pitch_info, stats.song, ap_settings, stats.sp, nplayer, screen, buttons, stats.urn, stats, playmode, piano_keys)
+			apf.playSong(stats.notes_list, stats.pitch_info, stats.song, ap_settings, stats.sp, nplayer, screen, buttons, stats.urn, stats, playmode, piano_keys, input_box)
 		
 		#reset playmode
 		stats.play_mode = ''
@@ -336,7 +355,7 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 		#change the playmode and prep
 		stats.play_mode = button.name
 		playmode.prep_play_mode()
-		update_screen(ap_settings, screen, buttons, playmode, piano_keys)
+		update_screen(ap_settings, screen, buttons, playmode, piano_keys, input_box)
 		#use logic to reduce api calls
 		if stats.spot_api_called == False:
 			#initialize spotify authorization
@@ -346,12 +365,12 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 			stats.spot_api_called = True
 			#get the urn for the song
 			#if no urn specificied or none not already defined find a random sample
-			if urn == 'random' and stats.urn == '':
+			if stats.urn == 'random':# and stats.urn == '':
 				samples = ap_settings.sample_urns
 				key = random.choice(list(samples.keys()))
 				#urn = random.choice(samples.items())
 				urn = ap_settings.sample_urns[key]
-				stats.urn = urn
+				#stats.urn = urn
 			else:
 				urn = stats.urn
 			# initialize the song and store in game stats to reduce API calls
@@ -361,7 +380,7 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 			stats.playing_track = stats.song.t_name
 			stats.playing_artist = stats.song.t_artist
 			playmode.prep_playing_output()
-			update_screen(ap_settings, screen, buttons, playmode, piano_keys)
+			update_screen(ap_settings, screen, buttons, playmode, piano_keys, input_box)
 			# get the pitch info
 			pitch_info = song.getPitchInfo()
 			stats.pitch_info = pitch_info
@@ -380,7 +399,7 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 			stats.playing_track = stats.song.t_name
 			stats.playing_artist = stats.song.t_artist
 			playmode.prep_playing_output()
-			update_screen(ap_settings, screen, buttons, playmode, piano_keys)
+			update_screen(ap_settings, screen, buttons, playmode, piano_keys, input_box)
 			#plot the graph
 			avf.plotAudio(stats.song, stats.pitch_info, stats.class_info, stats, 'f')
 		
@@ -399,8 +418,8 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 		stats.playing_track = 'Random Song'
 		stats.playing_artist = 'Synth Bot'
 		playmode.prep_playing_output()
-		update_screen(ap_settings, screen, buttons, playmode, piano_keys)
-		apf.playRandom(ap_settings, screen, buttons, nplayer, urn, stats, playmode, piano_keys)
+		update_screen(ap_settings, screen, buttons, playmode, piano_keys, input_box)
+		apf.playRandom(ap_settings, screen, buttons, nplayer, urn, stats, playmode, piano_keys, input_box)
 		#reset playmode
 		stats.play_mode = ''
 		stats.playing_track = ''
@@ -415,8 +434,8 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 		stats.playing_artist = 'Synth Bot'
 		playmode.prep_playing_output()
 		playmode.prep_play_mode()
-		update_screen(ap_settings, screen, buttons, playmode, piano_keys)
-		apf.playChromatic(ap_settings, screen, buttons, nplayer, urn, stats, playmode, piano_keys)
+		update_screen(ap_settings, screen, buttons, playmode, piano_keys, input_box)
+		apf.playChromatic(ap_settings, screen, buttons, nplayer, urn, stats, playmode, piano_keys, input_box)
 		#reset playmode
 		stats.play_mode = ''
 		stats.playing_track = ''
@@ -425,7 +444,7 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 		playmode.prep_play_mode()
 
 		
-def update_screen(ap_settings, screen, buttons, playmode, piano_keys):
+def update_screen(ap_settings, screen, buttons, playmode, piano_keys, input_box):
 	"""Update images on the screen and flip to a new screen."""
 	# Redraw the screen during each pass through the loop.
 	screen.fill(ap_settings.bg_color)
@@ -438,6 +457,9 @@ def update_screen(ap_settings, screen, buttons, playmode, piano_keys):
 	# Draw the play mode informtion.
 	playmode.show_play_info()
 	
+	#draw the input box
+	input_box.draw(screen)
+	
 	#Draw the piano key
 	for piano_key in piano_keys:
 		piano_key.draw_key()
@@ -445,6 +467,16 @@ def update_screen(ap_settings, screen, buttons, playmode, piano_keys):
 	# Make the most recently drawn screen visible.
 	pygame.display.flip()
 
+def create_input_box(ap_settings, stats):
+	"""Creates the input box for urns and places it"""
+	x = 20
+	y = stats.button_height_max * 6
+	w = 140
+	h = 32
+	InputBox(x, y, w, y)
+	
+	
+	
 def create_keys(ap_settings, screen, stats):
 	"""Create a group of keys and display like a keyboard"""
 	#create the group of keys
@@ -463,7 +495,7 @@ def create_keys(ap_settings, screen, stats):
 	#define the x starting value
 	x = center_screen - (total_width / 2)
 	#define top y value
-	y = stats.button_height_max * 6
+	y = stats.button_height_max * 7
 	for piano_key in piano_keys:
 		#if "#" not in piano_key.name:
 		piano_key.update_location(x, y)
