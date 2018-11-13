@@ -21,7 +21,7 @@ A musical synthesizer program with a few key functions:
 2. Key maps for note playback are outlined in "settings.py"
 3. Pressing "space" will stop any current function
 4. Pressing 'q' or clicking the exit "x" will close the program
-5. User can type a custom URI code for a song in the input box. Clipboard usage (i.e. Copy + Paste) is not supported. User only needs to enter unique code following spotify:track:
+5. User can type a custom URI code for a song in the input box. Clipboard usage (i.e. Copy + Paste) is not supported. User only needs to enter unique code following "spotify:track:" To get this information, log into spotify, right click on a song, click "share song", and then click "copy URI." Paste into a text editor like Notepad and type out URI. Press "enter" to set this as the new sample song.
 
 #Known bugs
 1.None
