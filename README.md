@@ -23,8 +23,7 @@ A musical synthesizer program with a few key functions:
 4. Pressing 'q' or clicking the exit "x" will close the program
 
 #Known bugs
-1. Program will crash if you try to click anywhere on the program if "Spectrogram" is active. You must close this window before 
-    using any additional "fun modes."
+1.None
 
 #Library dependencies
 1. pygame
