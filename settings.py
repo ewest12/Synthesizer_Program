@@ -7,13 +7,13 @@ class Settings():
 		# Screen settings
 		self.screen_width = 1200
 		self.screen_height = 700
-		self.bg_color = (230, 230, 230)
+		self.bg_color = (69, 68, 68)
 		
 		# Authorization info
-		self.client_id = 'your spotify developer client id'
-		self.client_secret = 'your spotify developer secret'
-		self.redirect_uri = 'your website hosting (not required)'
-		self.my_username = 'your spotify username (not required)'
+		self.client_id = 'fe2f103e32464be58710379146d91045'
+		self.client_secret = '192bc5e7e3d345afa099dc04983451d0'
+		self.redirect_uri = 'http://localhost/'
+		self.my_username = '123638665'
 		self.general_username = 'spotify'
 		
 		# Sample songs urns for demos
@@ -34,10 +34,11 @@ class Settings():
 							'TSSPD': 'spotify:track:0LD5KOEiegITINNgwiEwUh',
 							'CWW': 'spotify:track:3DqSaYzwNA7aK5UB93wmDJ',
 							'MJSC': 'spotify:track:2bCQHF9gdG5BNDVuEIEnNk',
-							'FBML': 'spotify:track:2Kc8MfQZA6jDtM8vaMcc3G'}
+							'FBML': 'spotify:track:2Kc8MfQZA6jDtM8vaMcc3G',
+							'BFAE': 'spotify:track:375DLhrFmnn8kSa6ZcKGdQ'}
 
 		# WAV filepath
-		self.wav_filepath = 'The file plat where you plan to store the folder "note waves" + /note_waves/'
+		self.wav_filepath = 'C:/Users/Evan/Documents/Programming/python_work/audio_play/note_waves/'
 		
 		#set all note frequencies in a basic chromatic scale
 		self.pitch_freq = {'C': 262, 'C#': 277, 'D': 293, 'D#': 311, 'E': 329, 'F': 349, 
@@ -46,10 +47,19 @@ class Settings():
 		#define pitch class dictionary
 		self.pitch_class = {'C': 0, 'C#': 1,'D': 2, 'D#': 3, 'E': 4, 'F': 5, 'F#': 6,
 				'G': 7, 'G#': 8, 'A': 9, 'A#': 10, 'B': 11}
+				
 		#set keymap for keyboard mode
 		self.key_map = {'a': 'C', 'w': 'C#', 's': 'D', 'e': 'D#', 'd': 'E', 
-				'f': "F", 't': 'F#', 'g': 'G', 'y': 'G#', 'h': 'A', 
-				'u': 'A#', 'j': 'B'}
+						'f': "F", 't': 'F#', 'g': 'G', 'y': 'G#', 'h': 'A', 
+						'u': 'A#', 'j': 'B'}
+		#set piano key items
+		#for whole notes
+		self.key_width_w = 30
+		self.key_height_w = 100
+		
+		#for sharps/flats
+		self.key_width_b = 40
+		self.key_height_b = 30
 		
 		# define y coordinates for displaying basic info
 		self.y_bar = 0.1
