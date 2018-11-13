@@ -5,10 +5,11 @@ import audio_play_functions as apf
 import spotipy_et_functions as spf
 import audio_viz_functions as avf
 from button import Button
+from piano_keys import PianoKey
 from song import Song
 from synth_stats import SynthStats
 
-def check_events(ap_settings, screen, buttons, nplayer, urn, stats, playmode):
+def check_events(ap_settings, screen, buttons, nplayer, urn, stats, playmode, piano_keys):
 	"""Respond to keypresses and mouse events."""
 	for event in pygame.event.get():
 		# Allows user to Quit
@@ -16,19 +17,19 @@ def check_events(ap_settings, screen, buttons, nplayer, urn, stats, playmode):
 			pygame.quit()		
 		# Allows control with keyboard
 		elif event.type == pygame.KEYDOWN:
-			check_keydown_events(event, ap_settings, screen, stats, nplayer)
+			check_keydown_events(event, ap_settings, screen, buttons, stats, playmode, nplayer, piano_keys)
 		elif event.type == pygame.KEYUP:
-			check_keyup_events(event)
+			check_keyup_events(event, ap_settings, screen, buttons, stats, playmode, nplayer, piano_keys)
 		# Mouse controls
 		elif event.type == pygame.MOUSEBUTTONDOWN:
 			mouse_x, mouse_y = pygame.mouse.get_pos()
 			#see which button was clicked
 			button = find_which_clicked(mouse_x, mouse_y, buttons)
 			#check info on that button
-			#try:
-			check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, playmode)
-			#except:
-			#	print("no buttons were clicked")
+			try:
+				check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, playmode, piano_keys)
+			except:
+				print("no buttons were clicked")
 			
 def find_which_clicked(mouse_x, mouse_y, buttons):
 	for button in buttons:
@@ -74,7 +75,6 @@ def find_which_clicked(mouse_x, mouse_y, buttons):
 			print("Button " + button.name + " clicked")
 			return button
 			break
-		
 		#print(button.name)
 		#print("Button X: " + str(b_x))
 		#print("Button Y: " + str(b_y))
@@ -90,57 +90,106 @@ def find_which_clicked(mouse_x, mouse_y, buttons):
 		#print("Clicked within Y Boundary: " + str(on_button_y))
 		#print("Button Clicked: " + str(button_clicked))
 
-
+def check_piano_key(key_down, piano_keys):
+	"""checks which piano key was pressed and returns it"""
+	for piano_key in piano_keys:
+		if key_down == piano_key.keymapname:
+			return piano_key
+			break
+			
+def check_piano_pitch(pitch, piano_keys):
+	"""checks which piano key a pitch is being played for and returns it"""
+	for piano_key in piano_keys:
+		if pitch == piano_key.name:
+			return piano_key
+			break			
 		
-def check_keydown_events(event, ap_settings, screen, stats, nplayer):
+		
+def check_keydown_events(event, ap_settings, screen, buttons, stats, playmode, nplayer, piano_keys):
 	"""Respond to keypresses."""
 	if event.key == pygame.K_a:
 		print("a key down")
-		pitch = ap_settings.key_map['a']
+		key_down = 'a'
+		piano_key = check_piano_key(key_down, piano_keys)
+		piano_key.change_colors_active()
+		pitch = ap_settings.key_map[key_down]
 		nplayer.play(pitch + ".wav")
 	elif event.key == pygame.K_w:
 		print("w key down")
-		pitch = ap_settings.key_map['w']
+		key_down = 'w'
+		piano_key = check_piano_key(key_down, piano_keys)
+		piano_key.change_colors_active()
+		pitch = ap_settings.key_map[key_down]
 		nplayer.play(pitch + ".wav")
 	elif event.key == pygame.K_s:
 		print("s key down")
-		pitch = ap_settings.key_map['s']
+		key_down = 's'
+		piano_key = check_piano_key(key_down, piano_keys)
+		piano_key.change_colors_active()
+		pitch = ap_settings.key_map[key_down]
 		nplayer.play(pitch + ".wav")
 	elif event.key == pygame.K_e:
 		print("e key down")
-		pitch = ap_settings.key_map['e']
+		key_down = 'e'
+		piano_key = check_piano_key(key_down, piano_keys)
+		piano_key.change_colors_active()
+		pitch = ap_settings.key_map[key_down]
 		nplayer.play(pitch + ".wav")
 	elif event.key == pygame.K_d:
 		print("d key down")
-		pitch = ap_settings.key_map['d']
+		key_down = 'd'
+		piano_key = check_piano_key(key_down, piano_keys)
+		piano_key.change_colors_active()
+		pitch = ap_settings.key_map[key_down]
 		nplayer.play(pitch + ".wav")
 	elif event.key == pygame.K_f:
 		print("f key down")
-		pitch = ap_settings.key_map['f']
+		key_down = 'f'
+		piano_key = check_piano_key(key_down, piano_keys)
+		piano_key.change_colors_active()
+		pitch = ap_settings.key_map[key_down]
 		nplayer.play(pitch + ".wav")
 	elif event.key == pygame.K_t:
 		print("t key down")
-		pitch = ap_settings.key_map['t']
+		key_down = 't'
+		piano_key = check_piano_key(key_down, piano_keys)
+		piano_key.change_colors_active()
+		pitch = ap_settings.key_map[key_down]
 		nplayer.play(pitch + ".wav")
 	elif event.key == pygame.K_g:
 		print("g key down")
-		pitch = ap_settings.key_map['g']
+		key_down = 'g'
+		piano_key = check_piano_key(key_down, piano_keys)
+		piano_key.change_colors_active()
+		pitch = ap_settings.key_map[key_down]
 		nplayer.play(pitch + ".wav")
 	elif event.key == pygame.K_y:
 		print("y key down")
-		pitch = ap_settings.key_map['y']
+		key_down = 'y'
+		piano_key = check_piano_key(key_down, piano_keys)
+		piano_key.change_colors_active()
+		pitch = ap_settings.key_map[key_down]
 		nplayer.play(pitch + ".wav")
 	elif event.key == pygame.K_h:
 		print("h key down")
-		pitch = ap_settings.key_map['h']
+		key_down = 'h'
+		piano_key = check_piano_key(key_down, piano_keys)
+		piano_key.change_colors_active()
+		pitch = ap_settings.key_map[key_down]
 		nplayer.play(pitch + ".wav")
 	elif event.key == pygame.K_u:
 		print("u key down")
-		pitch = ap_settings.key_map['u']
+		key_down = 'u'
+		piano_key = check_piano_key(key_down, piano_keys)
+		piano_key.change_colors_active()
+		pitch = ap_settings.key_map[key_down]
 		nplayer.play(pitch + ".wav")
 	elif event.key == pygame.K_j:
 		print("j key down")
-		pitch = ap_settings.key_map['j']
+		key_down = 'j'
+		piano_key = check_piano_key(key_down, piano_keys)
+		piano_key.change_colors_active()
+		pitch = ap_settings.key_map[key_down]
 		nplayer.play(pitch + ".wav")
 	#elif event.key == pygame.K_LEFT:
 	#	print("left key down")
@@ -153,14 +202,72 @@ def check_keydown_events(event, ap_settings, screen, stats, nplayer):
 		pygame.quit()
 
 		
-def check_keyup_events(event):
+def check_keyup_events(event, ap_settings, screen, buttons, stats, playmode, nplayer, piano_keys):
 	"""Respond to key releases."""
-	if event.key == pygame.K_RIGHT:
-		print("Right key up")
+	if event.key == pygame.K_a:
+		print("a key up")
+		key_up = 'a'
+		piano_key = check_piano_key(key_up, piano_keys)
+		piano_key.change_colors_passive()
+	elif event.key == pygame.K_w:
+		print("w key up")
+		key_up = 'w'
+		piano_key = check_piano_key(key_up, piano_keys)
+		piano_key.change_colors_passive()
+	elif event.key == pygame.K_s:
+		print("s key up")
+		key_up = 's'
+		piano_key = check_piano_key(key_up, piano_keys)
+		piano_key.change_colors_passive()
+	elif event.key == pygame.K_e:
+		print("e key up")
+		key_up = 'e'
+		piano_key = check_piano_key(key_up, piano_keys)
+		piano_key.change_colors_passive()
+	elif event.key == pygame.K_d:
+		print("d key up")
+		key_up = 'd'
+		piano_key = check_piano_key(key_up, piano_keys)
+		piano_key.change_colors_passive()
+	elif event.key == pygame.K_f:
+		print("f key up")
+		key_up = 'f'
+		piano_key = check_piano_key(key_up, piano_keys)
+		piano_key.change_colors_passive()
+	elif event.key == pygame.K_t:
+		print("t key up")
+		key_up = 't'
+		piano_key = check_piano_key(key_up, piano_keys)
+		piano_key.change_colors_passive()
+	elif event.key == pygame.K_g:
+		print("g key up")
+		key_up = 'g'
+		piano_key = check_piano_key(key_up, piano_keys)
+		piano_key.change_colors_passive()
+	elif event.key == pygame.K_y:
+		print("y key up")
+		key_up = 'y'
+		piano_key = check_piano_key(key_up, piano_keys)
+		piano_key.change_colors_passive()
+	elif event.key == pygame.K_h:
+		print("h key up")
+		key_up = 'h'
+		piano_key = check_piano_key(key_up, piano_keys)
+		piano_key.change_colors_passive()
+	elif event.key == pygame.K_u:
+		print("u key up")
+		key_up = 'u'
+		piano_key = check_piano_key(key_up, piano_keys)
+		piano_key.change_colors_passive()
+	elif event.key == pygame.K_j:
+		print("j key up")
+		key_up = 'j'
+		piano_key = check_piano_key(key_up, piano_keys)
+		piano_key.change_colors_passive()
 	elif event.key == pygame.K_LEFT:
 		print("Left key up")
 		
-def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, playmode):
+def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, playmode, piano_keys):
 	"""Detects which button was clicked and operates accordingly."""
 	#button_clicked = button.rect.collidepoint(mouse_x, mouse_y)
 	#if button_clicked:
@@ -171,7 +278,7 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 		stats.play_mode = button.name
 		print("Play mode: " + stats.play_mode)
 		playmode.prep_play_mode()
-		update_screen(ap_settings, screen, buttons, playmode)
+		update_screen(ap_settings, screen, buttons, playmode, piano_keys)
 		#use logic to reduce api calls
 		if stats.spot_api_called == False:
 			#initialize spotify authorization
@@ -187,7 +294,7 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 				urn = ap_settings.sample_urns[key]
 				stats.urn = urn
 			else:
-				urn = stats.urn 
+				urn = urn 
 			# initialize the song and store in game stats to reduce API calls
 			stats.init_song(sp, urn, ap_settings)
 			#song = Song(sp, urn, ap_settings)
@@ -195,7 +302,7 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 			stats.playing_track = stats.song.t_name
 			stats.playing_artist = stats.song.t_artist
 			playmode.prep_playing_output()
-			update_screen(ap_settings, screen, buttons, playmode)
+			update_screen(ap_settings, screen, buttons, playmode, piano_keys)
 
 			# get the pitch info
 			pitch_info = song.getPitchInfo()
@@ -209,14 +316,14 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 			# create all of the notes
 			#apf.createNotes(ap_settings, nplayer, stats)
 			#play the song
-			apf.playSong(notes_list, pitch_info, song, ap_settings, sp, nplayer, screen, buttons, urn, stats, playmode)
+			apf.playSong(notes_list, pitch_info, song, ap_settings, sp, nplayer, screen, buttons, urn, stats, playmode, piano_keys)
 		else:
 			stats.playing_track = stats.song.t_name
 			stats.playing_artist = stats.song.t_artist
 			playmode.prep_playing_output()
-			update_screen(ap_settings, screen, buttons, playmode)
+			update_screen(ap_settings, screen, buttons, playmode, piano_keys)
 			#play the song
-			apf.playSong(stats.notes_list, stats.pitch_info, stats.song, ap_settings, stats.sp, nplayer, screen, buttons, stats.urn, stats, playmode)
+			apf.playSong(stats.notes_list, stats.pitch_info, stats.song, ap_settings, stats.sp, nplayer, screen, buttons, stats.urn, stats, playmode, piano_keys)
 		
 		#reset playmode
 		stats.play_mode = ''
@@ -229,7 +336,7 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 		#change the playmode and prep
 		stats.play_mode = button.name
 		playmode.prep_play_mode()
-		update_screen(ap_settings, screen, buttons, playmode)
+		update_screen(ap_settings, screen, buttons, playmode, piano_keys)
 		#use logic to reduce api calls
 		if stats.spot_api_called == False:
 			#initialize spotify authorization
@@ -254,7 +361,7 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 			stats.playing_track = stats.song.t_name
 			stats.playing_artist = stats.song.t_artist
 			playmode.prep_playing_output()
-			update_screen(ap_settings, screen, buttons, playmode)
+			update_screen(ap_settings, screen, buttons, playmode, piano_keys)
 			# get the pitch info
 			pitch_info = song.getPitchInfo()
 			stats.pitch_info = pitch_info
@@ -273,7 +380,7 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 			stats.playing_track = stats.song.t_name
 			stats.playing_artist = stats.song.t_artist
 			playmode.prep_playing_output()
-			update_screen(ap_settings, screen, buttons, playmode)
+			update_screen(ap_settings, screen, buttons, playmode, piano_keys)
 			#plot the graph
 			avf.plotAudio(stats.song, stats.pitch_info, stats.class_info, stats, 'f')
 		
@@ -292,8 +399,8 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 		stats.playing_track = 'Random Song'
 		stats.playing_artist = 'Synth Bot'
 		playmode.prep_playing_output()
-		update_screen(ap_settings, screen, buttons, playmode)
-		apf.playRandom(ap_settings, screen, buttons, nplayer, urn, stats, playmode)
+		update_screen(ap_settings, screen, buttons, playmode, piano_keys)
+		apf.playRandom(ap_settings, screen, buttons, nplayer, urn, stats, playmode, piano_keys)
 		#reset playmode
 		stats.play_mode = ''
 		stats.playing_track = ''
@@ -308,8 +415,8 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 		stats.playing_artist = 'Synth Bot'
 		playmode.prep_playing_output()
 		playmode.prep_play_mode()
-		update_screen(ap_settings, screen, buttons, playmode)
-		apf.playChromatic(ap_settings, screen, buttons, nplayer, urn, stats, playmode)
+		update_screen(ap_settings, screen, buttons, playmode, piano_keys)
+		apf.playChromatic(ap_settings, screen, buttons, nplayer, urn, stats, playmode, piano_keys)
 		#reset playmode
 		stats.play_mode = ''
 		stats.playing_track = ''
@@ -318,7 +425,7 @@ def check_button(ap_settings, screen, button, buttons, nplayer, urn, stats, play
 		playmode.prep_play_mode()
 
 		
-def update_screen(ap_settings, screen, buttons, playmode):
+def update_screen(ap_settings, screen, buttons, playmode, piano_keys):
 	"""Update images on the screen and flip to a new screen."""
 	# Redraw the screen during each pass through the loop.
 	screen.fill(ap_settings.bg_color)
@@ -331,9 +438,42 @@ def update_screen(ap_settings, screen, buttons, playmode):
 	# Draw the play mode informtion.
 	playmode.show_play_info()
 	
+	#Draw the piano key
+	for piano_key in piano_keys:
+		piano_key.draw_key()
+	
 	# Make the most recently drawn screen visible.
 	pygame.display.flip()
-			
+
+def create_keys(ap_settings, screen, stats):
+	"""Create a group of keys and display like a keyboard"""
+	#create the group of keys
+	keys_to_make = ap_settings.key_map
+	piano_keys = []
+	total_width = 0
+	for key, value in keys_to_make.items():
+		piano_key = PianoKey(ap_settings, screen, value, key)
+		piano_keys.append(piano_key)
+		total_width = total_width + piano_key.width 
+		
+	#find center of screen
+	center_screen = ap_settings.screen_width / 2
+		
+	# display the keys like a keyboard
+	#define the x starting value
+	x = center_screen - (total_width / 2)
+	#define top y value
+	y = stats.button_height_max * 6
+	for piano_key in piano_keys:
+		#if "#" not in piano_key.name:
+		piano_key.update_location(x, y)
+		#else:
+		#	x = x - piano_key.width / 2
+		#	piano_key.update_location(x, y)
+		x = x + piano_key.width 
+		
+	return piano_keys
+	
 def create_buttons(ap_settings, screen, stats):
 	"""Create a full group of buttons."""
 	# Create a button and find the number of buttons in a row.
