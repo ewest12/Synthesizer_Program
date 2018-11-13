@@ -12,8 +12,8 @@ class Button():
 		# Set the dimensions and properties of the button.
 		#self.width = ap_settings.button_width
 		#self.height = ap_settings.button_height
-		self.button_color = (0, 255, 0)
-		self.text_color = (255, 255, 255)
+		self.button_color = (117, 236, 106)
+		self.text_color = (171, 170, 170)
 		self.font = pygame.font.SysFont(None, 48)
 		#get the width and height of the text
 		self.text_width, self.text_height = self.font.size(msg)
