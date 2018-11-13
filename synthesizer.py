@@ -15,6 +15,7 @@ from note_player import NotePlayer
 from song import Song
 from synth_stats import SynthStats
 from play_mode import PlayMode
+from piano_keys import PianoKey
 
 def run_program():
 	# Initialize the program and create a screen object.
@@ -26,30 +27,36 @@ def run_program():
 	pygame.display.set_caption("Synthesizer (beta)")
 	screen.fill(ap_settings.bg_color)
 	#initialize URN
-	urn = 'random'
+	#urn = 'random'
+	urn = 'spotify:track:375DLhrFmnn8kSa6ZcKGdQ'
 	
 	#initialize the play mode
 	stats = SynthStats(ap_settings)
-
 	
 	# Create the group of buttons
 	buttons = scf.create_buttons(ap_settings, screen, stats)
+	
+	#initialize the displayed play mode metrics
+	playmode = PlayMode(ap_settings, screen, stats)
+	playmode.prep_play_mode()
+	playmode.prep_playing_output() 
+	
+	# Create the group of piano keys
+	piano_keys = scf.create_keys(ap_settings, screen, stats)
 	
 	# Initialize the Note Player, create notes if needed, 
 	nplayer = NotePlayer(ap_settings)
 	apf.createNotes(ap_settings, nplayer, stats)
 	
-	playmode = PlayMode(ap_settings, screen, stats)
-	playmode.prep_play_mode()
-	playmode.prep_playing_output() 
+
 	
 	#start the main loop for the program
 	while True:
 		#check for events
-		scf.check_events(ap_settings, screen, buttons, nplayer, urn, stats, playmode)
+		scf.check_events(ap_settings, screen, buttons, nplayer, urn, stats, playmode, piano_keys)
 
 		#redraw the screen
-		scf.update_screen(ap_settings, screen, buttons, playmode)
+		scf.update_screen(ap_settings, screen, buttons, playmode, piano_keys)
 
 run_program()
 
