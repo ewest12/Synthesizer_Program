@@ -32,8 +32,6 @@ class PianoKey():
 		#set the piano key's location.
 		self.rect.x = 0
 		self.rect.y = 0
-		
-		#self.rect.center = self.screen_rect.center
 
 		msg = self.name
 		# The button message needs to be prepped only once.
@@ -70,7 +68,3 @@ class PianoKey():
 			self.text_color = (238, 238, 238)
 
 		self.prep_msg(self.name)
-
-	#def draw_rect(surface, fill_color, outline_color, rect, border=1):
-	#	surface.fill(outline_color, rect)
-	#	surface.fill(fill_color, rect.inflate(-border*2, -border*2))
