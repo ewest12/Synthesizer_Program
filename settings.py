@@ -10,10 +10,10 @@ class Settings():
 		self.bg_color = (69, 68, 68)
 		
 		# Authorization info
-		self.client_id = ''
-		self.client_secret = ''
-		self.redirect_uri = ''
-		self.my_username = ''
+		self.client_id = 'your client id'
+		self.client_secret = 'your client sectret'
+		self.redirect_uri = 'your redirect uri'
+		self.my_username = 'your username'
 		self.general_username = 'spotify'
 		
 		# Sample songs urns for demos
@@ -40,15 +40,16 @@ class Settings():
 							'MYYY': 'spotify:track:0hDQV9X1Da5JrwhK8gu86p'}
 
 		# WAV filepath
-		self.wav_filepath = 'C:/Users/Evan/Documents/Programming/python_work/audio_play/note_waves/'
+		self.wav_filepath = 'your filepath'
 		
 		#set all note frequencies in a basic chromatic scale
-		self.pitch_freq = {'C': 262, 'C#': 277, 'D': 293, 'D#': 311, 'E': 329, 'F': 349, 
-			'F#': 370, 'G': 392, 'G#': 415, 'A': 440, 'A#': 466, 'B': 494}
+		self.pitch_freq = {'C': 262, 'C#': 277, 'D': 293, 'D#': 311, 'E': 329, 
+			'F': 349, 'F#': 370, 'G': 392, 'G#': 415, 'A': 440, 'A#': 466, 
+			'B': 494}
 		
 		#define pitch class dictionary
-		self.pitch_class = {'C': 0, 'C#': 1,'D': 2, 'D#': 3, 'E': 4, 'F': 5, 'F#': 6,
-				'G': 7, 'G#': 8, 'A': 9, 'A#': 10, 'B': 11}
+		self.pitch_class = {'C': 0, 'C#': 1,'D': 2, 'D#': 3, 'E': 4, 'F': 5, 
+			'F#': 6, 'G': 7, 'G#': 8, 'A': 9, 'A#': 10, 'B': 11}
 				
 		#set keymap for keyboard mode
 		self.key_map = {'a': 'C', 'w': 'C#', 's': 'D', 'e': 'D#', 'd': 'E', 
