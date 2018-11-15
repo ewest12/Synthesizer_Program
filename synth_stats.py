@@ -17,14 +17,19 @@ class SynthStats():
 		self.show_spectro = False
 		self.play_bad_k = False
 		
-		#other stats
+		#Set general items
 		self.button_height_max = 0
+		self.ip_x = 20
+		self.ip_y = 0
+		self.ip_w = 140
+		self.ip_h = 40
 		
 		# API Call reducing logic
 		self.spot_api_called = False
 		self.sp = ''
 		self.urn = ''
 
+		#initialize note playback info
 		self.pitch_info = {}
 		self.class_info = {}
 		self.note_list = []
