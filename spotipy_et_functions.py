@@ -171,7 +171,6 @@ def getTracks(username, sp):
 	testlimit = 1
 	#read in the playlists
 	plists = sp.user_playlists(username, testlimit)
-	#plists = sp.user_playlists(username)
 	
 	#create a track name dictionary of playlist results
 	plistTracks = {}
@@ -269,11 +268,6 @@ def findDuplicates(tracks, filepath, filename):
 		f.write("[%d] %s\n" % (val[0], val[1]))
 	f.close()
 
-	#return values to user
-	#if return_type == 'duplicate':
-	#	return trackDups
-	#elif return_type == 'all':
-	#	return plistTracks
 	
 def displayAudioFeatures(urn):
 	track = sp.track(urn)
