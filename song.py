@@ -8,6 +8,7 @@ class Song():
 		self.sp = sp
 		self.ap_settings = ap_settings
 		self.urn = urn
+		
 		# set basic track info
 		track = sp.track(urn)
 		self.t_name = track['name']
@@ -136,10 +137,11 @@ class Song():
 			segment_y.append(y_segment)
 		
 		#create a dictionary for the return
-		pitchinfo = {'track id': self.t_name + "_" + self.t_artist, 'bar ts': bar_ts,
-					'bar y': bar_y, 'beat ts': beat_ts, 'beat y': beat_y, 'tatum ts': tatum_ts, 
-					'tatum y': tatum_y, 'section ts': section_ts, 'section y': 
-					section_y, 'segment ts': segment_ts, 'segment y': segment_y,
+		pitchinfo = {'track id': self.t_name + "_" + self.t_artist, 
+					'bar ts': bar_ts, 'bar y': bar_y, 'beat ts': beat_ts, 
+					'beat y': beat_y, 'tatum ts': tatum_ts, 'tatum y': tatum_y, 
+					'section ts': section_ts, 'section y': section_y, 
+					'segment ts': segment_ts, 'segment y': segment_y,
 					'pitch values': pitch_times_y}
 
 		return pitchinfo
