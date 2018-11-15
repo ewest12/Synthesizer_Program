@@ -26,6 +26,5 @@ class NotePlayer:
 		"""play a random note"""
 		index = random.randint(0, len(self.notes)-1)
 		note = list(self.notes.values())[index]
-		print(note)
 		#return note
 		note.play()
